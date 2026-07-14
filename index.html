@@ -754,6 +754,115 @@
 
     footer a:hover { opacity: 0.75; }
 
+    /* ── SPLASH INTRO ─────────────────────────────────────── */
+    body.splash-open { overflow: hidden; }
+
+    #splash {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      background: radial-gradient(ellipse at 50% 40%, #3a2f20 0%, var(--dark) 70%);
+      transition: opacity 0.9s ease, visibility 0.9s ease;
+    }
+
+    #splash.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .splash-inner {
+      max-width: 620px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: splashIn 1s ease forwards 0.2s;
+    }
+
+    @keyframes splashIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .splash-wave {
+      width: 120px;
+      margin: 0 auto 2rem;
+    }
+
+    .splash-hi {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 1.2rem;
+    }
+
+    .splash-inner h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 700;
+      color: var(--warm-white);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.4rem;
+    }
+
+    .splash-inner h1 em {
+      font-style: italic;
+      color: var(--light-brown);
+    }
+
+    .splash-inner p {
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: rgba(254, 250, 245, 0.7);
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    .splash-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--terracotta);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      padding: 1rem 2.6rem;
+      border-radius: 50px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: all 0.25s;
+    }
+
+    .splash-btn:hover {
+      background: #a8511f;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(196, 98, 45, 0.45);
+    }
+
+    .splash-btn svg {
+      width: 18px;
+      height: 18px;
+      transition: transform 0.25s;
+    }
+
+    .splash-btn:hover svg { transform: translateX(4px); }
+
+    .splash-note {
+      margin-top: 2rem;
+      font-size: 0.78rem;
+      font-style: italic;
+      color: rgba(254, 250, 245, 0.4);
+    }
+
     /* ── FADE IN ──────────────────────────────────────────── */
     .fade-in {
       opacity: 0;
@@ -815,7 +924,25 @@
     }
   </style>
 </head>
-<body>
+<body class="splash-open">
+
+  <!-- SPLASH INTRO -->
+  <div id="splash">
+    <div class="splash-inner">
+      <svg class="splash-wave" viewBox="0 0 120 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M4,18 C24,6 44,24 64,14 C84,4 104,22 116,12" stroke="#C4622D" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+        <path d="M8,22 C28,12 48,26 68,18 C88,8 108,24 114,18" stroke="#3A6B1A" stroke-width="2.5" stroke-linecap="round" opacity="0.45"/>
+      </svg>
+      <p class="splash-hi">A surprise for you 👋</p>
+      <h1>Hey <em>Yashi</em> —<br>I made you something.</h1>
+      <p>A little first draft of a website for your business — design, renovation &amp; painting, all in one place. Have a look and tell me what you think.</p>
+      <button class="splash-btn" id="splashBtn">
+        Take a look
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <p class="splash-note">Made with ♥ — just for you</p>
+    </div>
+  </div>
 
   <!-- NAV -->
   <nav id="navbar">
@@ -1086,6 +1213,16 @@
   </footer>
 
   <script>
+    // Splash intro dismiss
+    const splash = document.getElementById('splash');
+    const splashBtn = document.getElementById('splashBtn');
+    function dismissSplash() {
+      splash.classList.add('hidden');
+      document.body.classList.remove('splash-open');
+      window.scrollTo(0, 0);
+    }
+    splashBtn.addEventListener('click', dismissSplash);
+
     // Navbar scroll shadow
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
