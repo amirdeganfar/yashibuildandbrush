@@ -1068,14 +1068,16 @@
     <div class="contact-form-wrap fade-in">
       <p class="section-label">Send a Message</p>
       <h3 class="section-title">Start Your Project</h3>
-      <form class="form" onsubmit="handleSubmit(event)">
+      <form class="form" id="contactForm">
         <div class="form-row">
-          <input type="text" placeholder="Your Name" required />
-          <input type="email" placeholder="Your Email" required />
+          <input type="text" name="name" placeholder="Your Name" required />
+          <input type="email" name="email" placeholder="Your Email" required />
         </div>
-        <input type="tel" placeholder="Phone Number (optional)" />
-        <input type="text" placeholder="Project Type (e.g. Kitchen Renovation, Exterior Painting...)" />
-        <textarea placeholder="Tell me about your project..."></textarea>
+        <input type="tel" name="phone" placeholder="Phone Number (optional)" />
+        <input type="text" name="project" placeholder="Project Type (e.g. Kitchen Renovation, Exterior Painting...)" />
+        <textarea name="message" placeholder="Tell me about your project..."></textarea>
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+        <input type="hidden" name="_subject" value="New website enquiry — Yashar Brush & Build" />
         <button type="submit" class="btn btn-submit">Send Message →</button>
       </form>
     </div>
@@ -1117,22 +1119,34 @@
 
     document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-    // Form submit handler
-    function handleSubmit(e) {
+    // Form submit -> FormSubmit.co
+    const contactForm = document.getElementById('contactForm');
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = e.target.querySelector('button[type="submit"]');
-      btn.textContent = '✓ Message Sent!';
-      btn.style.background = '#3A6B1A';
-      btn.style.borderColor = '#3A6B1A';
+      const btn = contactForm.querySelector('button[type="submit"]');
+      const original = btn.textContent;
+      btn.textContent = 'Sending...';
       btn.disabled = true;
+      try {
+        const res = await fetch('https://formsubmit.co/ajax/yash.hosseini@gmail.com', {
+          method: 'POST',
+          body: new FormData(contactForm)
+        });
+        if (!res.ok) throw new Error('send failed');
+        btn.textContent = '✓ Message Sent!';
+        btn.style.background = '#3A6B1A';
+        btn.style.borderColor = '#3A6B1A';
+        contactForm.reset();
+      } catch {
+        btn.textContent = 'Something went wrong — please try again';
+      }
       setTimeout(() => {
-        btn.textContent = 'Send Message →';
+        btn.textContent = original;
         btn.style.background = '';
         btn.style.borderColor = '';
         btn.disabled = false;
-        e.target.reset();
-      }, 3500);
-    }
+      }, 4000);
+    });
   </script>
 </body>
 </html>
